@@ -99,7 +99,6 @@ namespace Yatzy_1
                 {
                     // Iterera över alla tärningars status
                     for (int i = 0; i < 5; i++)
-
                     {
                         // Om tärningen har statusen rullar
                         if (tärningarStatus[i] == 2)
