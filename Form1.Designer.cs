@@ -40,8 +40,11 @@ namespace Yatzy_1
             this.pctTärning2 = new System.Windows.Forms.PictureBox();
             this.pctTärning1 = new System.Windows.Forms.PictureBox();
             this.lbxFramtid = new System.Windows.Forms.ListBox();
+            this.lbxHisto = new System.Windows.Forms.ListBox();
+            this.lbxTest = new System.Windows.Forms.ListBox();
             this.gbxFramtid.SuspendLayout();
             this.pnlFramtid.SuspendLayout();
+            this.gbxInstallningar.SuspendLayout();
             this.gbxSpel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pctTärning5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pctTärning4)).BeginInit();
@@ -71,6 +74,8 @@ namespace Yatzy_1
             // 
             // gbxInstallningar
             // 
+            this.gbxInstallningar.Controls.Add(this.lbxTest);
+            this.gbxInstallningar.Controls.Add(this.lbxHisto);
             this.gbxInstallningar.Location = new System.Drawing.Point(12, 194);
             this.gbxInstallningar.Name = "gbxInstallningar";
             this.gbxInstallningar.Size = new System.Drawing.Size(310, 82);
@@ -111,6 +116,7 @@ namespace Yatzy_1
             this.pctTärning5.Size = new System.Drawing.Size(52, 50);
             this.pctTärning5.TabIndex = 4;
             this.pctTärning5.TabStop = false;
+            this.pctTärning5.Click += new System.EventHandler(this.pctTärning5_Click);
             // 
             // pctTärning4
             // 
@@ -120,6 +126,7 @@ namespace Yatzy_1
             this.pctTärning4.Size = new System.Drawing.Size(52, 50);
             this.pctTärning4.TabIndex = 3;
             this.pctTärning4.TabStop = false;
+            this.pctTärning4.Click += new System.EventHandler(this.pctTärning4_Click);
             // 
             // pctTärning3
             // 
@@ -129,6 +136,7 @@ namespace Yatzy_1
             this.pctTärning3.Size = new System.Drawing.Size(52, 50);
             this.pctTärning3.TabIndex = 2;
             this.pctTärning3.TabStop = false;
+            this.pctTärning3.Click += new System.EventHandler(this.pctTärning3_Click);
             // 
             // pctTärning2
             // 
@@ -138,6 +146,7 @@ namespace Yatzy_1
             this.pctTärning2.Size = new System.Drawing.Size(52, 50);
             this.pctTärning2.TabIndex = 1;
             this.pctTärning2.TabStop = false;
+            this.pctTärning2.Click += new System.EventHandler(this.pctTärning2_Click);
             // 
             // pctTärning1
             // 
@@ -148,6 +157,7 @@ namespace Yatzy_1
             this.pctTärning1.Size = new System.Drawing.Size(52, 50);
             this.pctTärning1.TabIndex = 0;
             this.pctTärning1.TabStop = false;
+            this.pctTärning1.Click += new System.EventHandler(this.pctTärning1_Click);
             // 
             // lbxFramtid
             // 
@@ -156,6 +166,22 @@ namespace Yatzy_1
             this.lbxFramtid.Name = "lbxFramtid";
             this.lbxFramtid.Size = new System.Drawing.Size(120, 95);
             this.lbxFramtid.TabIndex = 0;
+            // 
+            // lbxHisto
+            // 
+            this.lbxHisto.FormattingEnabled = true;
+            this.lbxHisto.Location = new System.Drawing.Point(7, 20);
+            this.lbxHisto.Name = "lbxHisto";
+            this.lbxHisto.Size = new System.Drawing.Size(120, 56);
+            this.lbxHisto.TabIndex = 0;
+            // 
+            // lbxTest
+            // 
+            this.lbxTest.FormattingEnabled = true;
+            this.lbxTest.Location = new System.Drawing.Point(134, 20);
+            this.lbxTest.Name = "lbxTest";
+            this.lbxTest.Size = new System.Drawing.Size(170, 56);
+            this.lbxTest.TabIndex = 1;
             // 
             // Form1
             // 
@@ -170,6 +196,7 @@ namespace Yatzy_1
             this.Load += new System.EventHandler(this.Form1_Load);
             this.gbxFramtid.ResumeLayout(false);
             this.pnlFramtid.ResumeLayout(false);
+            this.gbxInstallningar.ResumeLayout(false);
             this.gbxSpel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pctTärning5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pctTärning4)).EndInit();
@@ -193,6 +220,8 @@ namespace Yatzy_1
         private System.Windows.Forms.PictureBox pctTärning1;
         private System.Windows.Forms.Button btnRulla;
         private System.Windows.Forms.ListBox lbxFramtid;
+        private System.Windows.Forms.ListBox lbxTest;
+        private System.Windows.Forms.ListBox lbxHisto;
     }
 }
 

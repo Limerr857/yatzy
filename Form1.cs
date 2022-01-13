@@ -119,12 +119,14 @@ namespace Yatzy_1
             // Och återställ tärningarnas bakgrundsfärg
             SlumpaTärningsfärg(true, tärningarStatus);
 
-            //
-            // Poängdelen
-            //
-
             // Lägg till resultatet i historiken
             historikLista.Add(tärningarVärde);
+
+            // TEMP: Sätt in i lbxHisto
+            lbxHisto.Items.Add(string.Join(" ", tärningarVärde));
+
+            // TEMP: Sätt in specialfall i lbxTest
+            lbxTest.Items.Add(string.Join(", ", MöjligaSpecialfall(tärningarVärde)));
             
         }
 
@@ -183,7 +185,8 @@ namespace Yatzy_1
                 return;
             }
 
-            // Ger alla tärningarna en bakgrundsfärg slumpmässigt
+            // Ger alla tärningarna en bakgrundsfärg slumpmässigt om de har statusen
+            // "rullar" (2)
             if (tärningarStatus[0] == 2)
             {
                 pctTärning1.BackColor = Color.FromKnownColor(färgnamn[rand.Next(färgnamn.Length)]);
@@ -264,13 +267,16 @@ namespace Yatzy_1
                 }
             }
 
-            // Skapa en bool som kollar om alla if-satser nedan är falska
+            // Skapa en bool som är sann i slutet om alla if-satser nedan är falska
             bool ingaSpecial = true;
 
             // Om det har blivit Yatzy
             if (vanligastRäkna == 5)
             {
+                // Lägg in att det blivit Yatzy i specialfall
                 specialfall.Add("yatzy");
+
+                // Och spara att det har skett ett specialfall
                 ingaSpecial = false;
             }
 
@@ -309,6 +315,29 @@ namespace Yatzy_1
                 ingaSpecial = false;
             }
 
+            // Om inga av de tidigare specialfallen har satts,
+            // kolla de specialfall som inte kan ha några par
+            if (ingaSpecial)
+            {
+                // Sortera temptärningarvärde enligt storleksordning
+                // för att kunna beräkna stegar senare
+                Array.Sort(tempTärningarVärde);
+
+                // Om det blivit liten stege
+                if (tempTärningarVärde[0] == 1 && tempTärningarVärde[4] == 5)
+                {
+                    specialfall.Add("liten stege");
+                    ingaSpecial = false;
+                }
+
+                // Om det blivit stor stege
+                if (tempTärningarVärde[0] == 2 && tempTärningarVärde[4] == 6)
+                {
+                    specialfall.Add("stor stege");
+                    ingaSpecial = false;
+                }
+            }
+
             // Om inga andra specialfall har satts, ge en sista chans enligt spelreglerna
             if (ingaSpecial)
             {
@@ -317,6 +346,69 @@ namespace Yatzy_1
 
             // return poäng, specialfall
             return specialfall;
+        }
+    
+        private void VäljTärning(int tärning, PictureBox pictureBox)
+        {
+            // Metoden startas när en av tärningarna klickas på
+
+            switch (tärningarStatus[tärning])
+            {
+                // Tärningen är inte vald
+                case 0:
+                    // Sätt tärningsbakgrunden till en röd färg
+                    pictureBox.BackColor = Color.DarkRed;
+
+                    // Sätt tärningens status till "vald" (1)
+                    tärningarStatus[tärning] = 1;
+
+                    // Avsluta programmet
+                    return;
+
+                // Tärningen är vald
+                case 1:
+                    // Återställ bakgrunden
+                    pictureBox.BackColor = Control.DefaultBackColor;
+
+                    // Sätt tärningens status till "ej vald" (0)
+                    tärningarStatus[tärning] = 0;
+
+                    // Avsluta programmet
+                    return;
+
+                // Tärningen rullar
+                case 2:
+                    // Gör ingenting
+                    return;
+
+                default:
+                    break;
+            }
+        }
+
+        private void pctTärning1_Click(object sender, EventArgs e)
+        {
+            VäljTärning(0, pctTärning1);
+        }
+
+        private void pctTärning2_Click(object sender, EventArgs e)
+        {
+            VäljTärning(1, pctTärning2);
+        }
+
+        private void pctTärning3_Click(object sender, EventArgs e)
+        {
+            VäljTärning(2, pctTärning3);
+        }
+
+        private void pctTärning4_Click(object sender, EventArgs e)
+        {
+            VäljTärning(3, pctTärning4);
+        }
+
+        private void pctTärning5_Click(object sender, EventArgs e)
+        {
+            VäljTärning(4, pctTärning5);
         }
     }
 }
