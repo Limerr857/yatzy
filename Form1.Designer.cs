@@ -42,6 +42,10 @@ namespace Yatzy_1
             this.lbxFramtid = new System.Windows.Forms.ListBox();
             this.lbxHisto = new System.Windows.Forms.ListBox();
             this.lbxTest = new System.Windows.Forms.ListBox();
+            this.chlbxSpecialfall = new System.Windows.Forms.CheckedListBox();
+            this.btnKlar = new System.Windows.Forms.Button();
+            this.lblSlagKvar = new System.Windows.Forms.Label();
+            this.lblSpecialfall = new System.Windows.Forms.Label();
             this.gbxFramtid.SuspendLayout();
             this.pnlFramtid.SuspendLayout();
             this.gbxInstallningar.SuspendLayout();
@@ -85,6 +89,10 @@ namespace Yatzy_1
             // 
             // gbxSpel
             // 
+            this.gbxSpel.Controls.Add(this.lblSpecialfall);
+            this.gbxSpel.Controls.Add(this.lblSlagKvar);
+            this.gbxSpel.Controls.Add(this.btnKlar);
+            this.gbxSpel.Controls.Add(this.chlbxSpecialfall);
             this.gbxSpel.Controls.Add(this.btnRulla);
             this.gbxSpel.Controls.Add(this.pctTärning5);
             this.gbxSpel.Controls.Add(this.pctTärning4);
@@ -183,6 +191,43 @@ namespace Yatzy_1
             this.lbxTest.Size = new System.Drawing.Size(170, 56);
             this.lbxTest.TabIndex = 1;
             // 
+            // chlbxSpecialfall
+            // 
+            this.chlbxSpecialfall.CheckOnClick = true;
+            this.chlbxSpecialfall.FormattingEnabled = true;
+            this.chlbxSpecialfall.Location = new System.Drawing.Point(122, 104);
+            this.chlbxSpecialfall.Name = "chlbxSpecialfall";
+            this.chlbxSpecialfall.Size = new System.Drawing.Size(182, 64);
+            this.chlbxSpecialfall.TabIndex = 6;
+            // 
+            // btnKlar
+            // 
+            this.btnKlar.Location = new System.Drawing.Point(7, 145);
+            this.btnKlar.Name = "btnKlar";
+            this.btnKlar.Size = new System.Drawing.Size(109, 23);
+            this.btnKlar.TabIndex = 7;
+            this.btnKlar.Text = "Klar med slag";
+            this.btnKlar.UseVisualStyleBackColor = true;
+            this.btnKlar.Click += new System.EventHandler(this.btnKlar_Click);
+            // 
+            // lblSlagKvar
+            // 
+            this.lblSlagKvar.AutoSize = true;
+            this.lblSlagKvar.Location = new System.Drawing.Point(29, 80);
+            this.lblSlagKvar.Name = "lblSlagKvar";
+            this.lblSlagKvar.Size = new System.Drawing.Size(64, 13);
+            this.lblSlagKvar.TabIndex = 8;
+            this.lblSlagKvar.Text = "Slag kvar: 3";
+            // 
+            // lblSpecialfall
+            // 
+            this.lblSpecialfall.AutoSize = true;
+            this.lblSpecialfall.Location = new System.Drawing.Point(15, 104);
+            this.lblSpecialfall.Name = "lblSpecialfall";
+            this.lblSpecialfall.Size = new System.Drawing.Size(92, 13);
+            this.lblSpecialfall.TabIndex = 9;
+            this.lblSpecialfall.Text = "Möjliga specialfall:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -198,6 +243,7 @@ namespace Yatzy_1
             this.pnlFramtid.ResumeLayout(false);
             this.gbxInstallningar.ResumeLayout(false);
             this.gbxSpel.ResumeLayout(false);
+            this.gbxSpel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pctTärning5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pctTärning4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pctTärning3)).EndInit();
@@ -222,6 +268,10 @@ namespace Yatzy_1
         private System.Windows.Forms.ListBox lbxFramtid;
         private System.Windows.Forms.ListBox lbxTest;
         private System.Windows.Forms.ListBox lbxHisto;
+        private System.Windows.Forms.CheckedListBox chlbxSpecialfall;
+        private System.Windows.Forms.Button btnKlar;
+        private System.Windows.Forms.Label lblSpecialfall;
+        private System.Windows.Forms.Label lblSlagKvar;
     }
 }
 

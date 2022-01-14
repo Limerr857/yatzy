@@ -56,11 +56,22 @@ namespace Yatzy_1
 
         private void KastaTärningarna(Image[] tärningarGrafik, int[] tärningarVärde, List<Array> historikLista)
         {
-            // Sätt alla tärningars status till "Rullar" 
+            // Sätt alla tärningars status till "Rullar" (2)
+            // om deras status är "inte vald" (0)
             for (int i = 0; i < 5; i++)
             {
-                tärningarStatus[i] = 2;
+                if (tärningarStatus[i] == 0)
+                {
+                    tärningarStatus[i] = 2;
+                }
             }
+
+            // Återställ tärningarnas markeringar, bara visuellt
+            pctTärning1.BorderStyle = BorderStyle.None;
+            pctTärning2.BorderStyle = BorderStyle.None;
+            pctTärning3.BorderStyle = BorderStyle.None;
+            pctTärning4.BorderStyle = BorderStyle.None;
+            pctTärning5.BorderStyle = BorderStyle.None;
 
             // Stäng av "Rulla!" knappen
             btnRulla.Enabled = false;
@@ -122,11 +133,24 @@ namespace Yatzy_1
             // Lägg till resultatet i historiken
             historikLista.Add(tärningarVärde);
 
+            // Efter tärningarna har rullats kan alla tärningarnas status
+            // återställas till "inte vald" (0)
+            for (int i = 0; i < 5; i++)
+            {
+                tärningarStatus[i] = 0;
+            }
+
             // TEMP: Sätt in i lbxHisto
             lbxHisto.Items.Add(string.Join(" ", tärningarVärde));
 
             // TEMP: Sätt in specialfall i lbxTest
             lbxTest.Items.Add(string.Join(", ", MöjligaSpecialfall(tärningarVärde)));
+
+            // Rensa specialfallen i chlbx för att kunna lägga in nya
+            chlbxSpecialfall.Items.Clear();
+
+            // Lägg in de möjliga specialfallen i chlbx genom metoden MöjligaSpecialfall
+            chlbxSpecialfall.Items.AddRange(MöjligaSpecialfall(tärningarVärde).ToArray());
             
         }
 
@@ -169,7 +193,14 @@ namespace Yatzy_1
 
             // Återställ tärningshistoriken
             historikLista.Clear();
-            
+
+            // Återställ tärningarnas borderstyle,
+            // avmarkerar alla tärningar
+            pctTärning1.BorderStyle = BorderStyle.None;
+            pctTärning2.BorderStyle = BorderStyle.None;
+            pctTärning3.BorderStyle = BorderStyle.None;
+            pctTärning4.BorderStyle = BorderStyle.None;
+            pctTärning5.BorderStyle = BorderStyle.None;
         }
 
         private void SlumpaTärningsfärg(bool återställ, int[] tärningarStatus)
@@ -207,16 +238,16 @@ namespace Yatzy_1
             {
                 pctTärning5.BackColor = Color.FromKnownColor(färgnamn[rand.Next(färgnamn.Length)]);
             }
-            
-            // Avsluta metoden
-            return;
         }
 
 
-        private List<string> MöjligaSpecialfall(int[] tempTärningarVärde)
+        private List<string> MöjligaSpecialfall(int[] TärningarVärde)
         {
             // Metoden ger en lista med alla möjliga specialfall
             // utifrån en viss samling tärningsvärden
+
+            // Kopiera TärningarVärde för att inte ändra på den 
+            int[] tempTärningarVärde = (int[])TärningarVärde.Clone();
 
             // Skapa en lista som sparar de möjliga specialfallen
             List<string> specialfall = new List<string>();
@@ -246,11 +277,10 @@ namespace Yatzy_1
             double andraVanligastRäkna = 0;
             double andraVanligastSiffra;
 
-            // Skapa en ny array från tempTärningarVärde utan den vanligaste siffran och
-            // kopiera innehållet av tempTärningarVärde till tempTärningarVärdeAndra
+            // Skapa en ny array från tempTärningarVärde
             int[] tempTärningarVärdeAndra = (int[])tempTärningarVärde.Clone();
 
-            // Ta bort den vanligaste siffran
+            // Ta bort den vanligaste siffran från tempTärningarVärdeAndra
             tempTärningarVärdeAndra = tempTärningarVärdeAndra.Where(val => val != vanligastSiffra).ToArray();
 
             // Beräkna båda variablarnas värden
@@ -356,8 +386,8 @@ namespace Yatzy_1
             {
                 // Tärningen är inte vald
                 case 0:
-                    // Sätt tärningsbakgrunden till en röd färg
-                    pictureBox.BackColor = Color.DarkRed;
+                    // Sätt på en "3D effekt" som markerar knappen som vald
+                    pictureBox.BorderStyle = BorderStyle.Fixed3D;
 
                     // Sätt tärningens status till "vald" (1)
                     tärningarStatus[tärning] = 1;
@@ -367,8 +397,8 @@ namespace Yatzy_1
 
                 // Tärningen är vald
                 case 1:
-                    // Återställ bakgrunden
-                    pictureBox.BackColor = Control.DefaultBackColor;
+                    // Stäng av "3D effekten"
+                    pictureBox.BorderStyle = BorderStyle.None;
 
                     // Sätt tärningens status till "ej vald" (0)
                     tärningarStatus[tärning] = 0;
@@ -384,6 +414,20 @@ namespace Yatzy_1
                 default:
                     break;
             }
+        }
+
+        private int SlutförRundan()
+        {
+            // Metoden räknar och ger poäng till spelaren beroende på
+            // vilket specialfall som är vald.
+            // Efter detta återställs spelet delvist.
+
+            // Spara spelarens poäng denna runda i en variabel
+            int poängRunda = 0;
+
+
+
+            return poängRunda;
         }
 
         private void pctTärning1_Click(object sender, EventArgs e)
@@ -409,6 +453,15 @@ namespace Yatzy_1
         private void pctTärning5_Click(object sender, EventArgs e)
         {
             VäljTärning(4, pctTärning5);
+        }
+
+        private void btnKlar_Click(object sender, EventArgs e)
+        {
+            // Slutför spelet om endast en checkbox är vald i chlbxSpecialfall
+            if (chlbxSpecialfall.CheckedItems.Length() != 2)
+            {
+
+            }
         }
     }
 }
