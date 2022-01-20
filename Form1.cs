@@ -35,7 +35,11 @@ namespace Yatzy_1
         KnownColor[] färgnamn = (KnownColor[])Enum.GetValues(typeof(KnownColor));
 
         // Skapa en lista med array:er av alla tidigare tärningsslag
+        // TODO: Ta bort??
         List<Array> historikLista = new List<Array>();
+
+        // Skapa en int som sparar spelarens total poäng
+        int spelarPoäng = 0;
 
         public Form1()
         {
@@ -84,9 +88,9 @@ namespace Yatzy_1
 
                 // Om alla tärningar har slutat rulla, stoppa loopen
                 if (!tärningarStatus.Contains(2))
-                    {
-                        rullar = false;
-                    }
+                {
+                    rullar = false;
+                }
 
                 // Byt nummer på alla tärningar slumpmässigt
                 for (int i = 0; i < 5; i++)
@@ -96,7 +100,7 @@ namespace Yatzy_1
                     {
                         tärningarVärde[i] = rand.Next(1, 7);
                         SlumpaTärningsfärg(false, tärningarStatus);
-                    }               
+                    }
                 }
 
                 // Uppdatera tärningsgrafiken
@@ -151,7 +155,7 @@ namespace Yatzy_1
 
             // Lägg in de möjliga specialfallen i chlbx genom metoden MöjligaSpecialfall
             chlbxSpecialfall.Items.AddRange(MöjligaSpecialfall(tärningarVärde).ToArray());
-            
+
         }
 
         private void UppdateraGrafik(Image[] tärningarGrafik, int[] tärningarVärde)
@@ -184,7 +188,7 @@ namespace Yatzy_1
             // 0 = ej vald, 1 = vald, 2 = rulla
             for (int i = 0; i < tärningarStatus.Length; i++)
             {
-               
+
                 tärningarStatus[i] = 0;
             }
 
@@ -201,6 +205,9 @@ namespace Yatzy_1
             pctTärning3.BorderStyle = BorderStyle.None;
             pctTärning4.BorderStyle = BorderStyle.None;
             pctTärning5.BorderStyle = BorderStyle.None;
+
+            // Återställ spelarpoängen
+            spelarPoäng = 0;
         }
 
         private void SlumpaTärningsfärg(bool återställ, int[] tärningarStatus)
@@ -349,19 +356,16 @@ namespace Yatzy_1
             // kolla de specialfall som inte kan ha några par
             if (ingaSpecial)
             {
-                // Sortera temptärningarvärde enligt storleksordning
-                // för att kunna beräkna stegar senare
-                Array.Sort(tempTärningarVärde);
-
                 // Om det blivit liten stege
-                if (tempTärningarVärde[0] == 1 && tempTärningarVärde[4] == 5)
+                if (!tempTärningarVärde.Contains(6))
                 {
                     specialfall.Add("liten stege");
                     ingaSpecial = false;
                 }
 
                 // Om det blivit stor stege
-                if (tempTärningarVärde[0] == 2 && tempTärningarVärde[4] == 6)
+                // (Om det inte finns en etta inuti)
+                if (!tempTärningarVärde.Contains(1))
                 {
                     specialfall.Add("stor stege");
                     ingaSpecial = false;
@@ -377,7 +381,7 @@ namespace Yatzy_1
             // return poäng, specialfall
             return specialfall;
         }
-    
+
         private void VäljTärning(int tärning, PictureBox pictureBox)
         {
             // Metoden startas när en av tärningarna klickas på
@@ -416,18 +420,25 @@ namespace Yatzy_1
             }
         }
 
-        private int SlutförRundan()
+        private int RundPoäng()
         {
             // Metoden räknar och ger poäng till spelaren beroende på
             // vilket specialfall som är vald.
-            // Efter detta återställs spelet delvist.
 
             // Spara spelarens poäng denna runda i en variabel
             int poängRunda = 0;
 
-
+            if (chlbxSpecialfall.SelectedItem.ToString() == "yatzy")
+            {
+                poängRunda = 50;
+            }
 
             return poängRunda;
+        }
+
+        private void RundanKlar()
+        {
+            
         }
 
         private void pctTärning1_Click(object sender, EventArgs e)
@@ -457,10 +468,24 @@ namespace Yatzy_1
 
         private void btnKlar_Click(object sender, EventArgs e)
         {
-            // Slutför spelet om endast en checkbox är vald i chlbxSpecialfall
-            if (chlbxSpecialfall.CheckedItems.Length() != 2)
+            int counter = 0;
+            // Räknar antalet valda checkboxes
+            foreach (int check in chlbxSpecialfall.CheckedIndices)
             {
+                counter++;
+            }
 
+            // Slutför spelet om endast en checkbox är vald i chlbxSpecialfall
+            if (counter == 1)
+            {
+                // Lägger till poängen som tjänades under rundan
+                spelarPoäng += RundPoäng();
+
+                // Uppdaterar lblPoäng
+                lblPoäng.Text = "Spelarpoäng: " + spelarPoäng;
+
+                // Återställer spelet för nästa runda
+                RundanKlar();
             }
         }
     }
