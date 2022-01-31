@@ -31,10 +31,8 @@ namespace Yatzy_1
         {
             this.gbxFramtid = new System.Windows.Forms.GroupBox();
             this.lbxFramtid = new System.Windows.Forms.ListBox();
-            this.gbxInstallningar = new System.Windows.Forms.GroupBox();
-            this.lbxTest = new System.Windows.Forms.ListBox();
-            this.lbxHisto = new System.Windows.Forms.ListBox();
             this.gbxSpel = new System.Windows.Forms.GroupBox();
+            this.lblPoäng = new System.Windows.Forms.Label();
             this.lblSpecialfall = new System.Windows.Forms.Label();
             this.lblSlagKvar = new System.Windows.Forms.Label();
             this.btnKlar = new System.Windows.Forms.Button();
@@ -45,9 +43,7 @@ namespace Yatzy_1
             this.pctTärning3 = new System.Windows.Forms.PictureBox();
             this.pctTärning2 = new System.Windows.Forms.PictureBox();
             this.pctTärning1 = new System.Windows.Forms.PictureBox();
-            this.lblPoäng = new System.Windows.Forms.Label();
             this.gbxFramtid.SuspendLayout();
-            this.gbxInstallningar.SuspendLayout();
             this.gbxSpel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pctTärning5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pctTärning4)).BeginInit();
@@ -61,7 +57,7 @@ namespace Yatzy_1
             this.gbxFramtid.Controls.Add(this.lbxFramtid);
             this.gbxFramtid.Location = new System.Drawing.Point(328, 12);
             this.gbxFramtid.Name = "gbxFramtid";
-            this.gbxFramtid.Size = new System.Drawing.Size(199, 117);
+            this.gbxFramtid.Size = new System.Drawing.Size(199, 264);
             this.gbxFramtid.TabIndex = 0;
             this.gbxFramtid.TabStop = false;
             this.gbxFramtid.Text = "Möjliga kombinationer";
@@ -71,35 +67,8 @@ namespace Yatzy_1
             this.lbxFramtid.FormattingEnabled = true;
             this.lbxFramtid.Location = new System.Drawing.Point(6, 19);
             this.lbxFramtid.Name = "lbxFramtid";
-            this.lbxFramtid.Size = new System.Drawing.Size(187, 95);
+            this.lbxFramtid.Size = new System.Drawing.Size(187, 238);
             this.lbxFramtid.TabIndex = 0;
-            // 
-            // gbxInstallningar
-            // 
-            this.gbxInstallningar.Controls.Add(this.lbxTest);
-            this.gbxInstallningar.Controls.Add(this.lbxHisto);
-            this.gbxInstallningar.Location = new System.Drawing.Point(12, 194);
-            this.gbxInstallningar.Name = "gbxInstallningar";
-            this.gbxInstallningar.Size = new System.Drawing.Size(310, 82);
-            this.gbxInstallningar.TabIndex = 1;
-            this.gbxInstallningar.TabStop = false;
-            this.gbxInstallningar.Text = "Inställningar";
-            // 
-            // lbxTest
-            // 
-            this.lbxTest.FormattingEnabled = true;
-            this.lbxTest.Location = new System.Drawing.Point(134, 20);
-            this.lbxTest.Name = "lbxTest";
-            this.lbxTest.Size = new System.Drawing.Size(170, 56);
-            this.lbxTest.TabIndex = 1;
-            // 
-            // lbxHisto
-            // 
-            this.lbxHisto.FormattingEnabled = true;
-            this.lbxHisto.Location = new System.Drawing.Point(7, 20);
-            this.lbxHisto.Name = "lbxHisto";
-            this.lbxHisto.Size = new System.Drawing.Size(120, 56);
-            this.lbxHisto.TabIndex = 0;
             // 
             // gbxSpel
             // 
@@ -116,10 +85,19 @@ namespace Yatzy_1
             this.gbxSpel.Controls.Add(this.pctTärning1);
             this.gbxSpel.Location = new System.Drawing.Point(12, 12);
             this.gbxSpel.Name = "gbxSpel";
-            this.gbxSpel.Size = new System.Drawing.Size(310, 176);
+            this.gbxSpel.Size = new System.Drawing.Size(310, 264);
             this.gbxSpel.TabIndex = 2;
             this.gbxSpel.TabStop = false;
             this.gbxSpel.Text = "Spel";
+            // 
+            // lblPoäng
+            // 
+            this.lblPoäng.AutoSize = true;
+            this.lblPoäng.Location = new System.Drawing.Point(197, 80);
+            this.lblPoäng.Name = "lblPoäng";
+            this.lblPoäng.Size = new System.Drawing.Size(79, 13);
+            this.lblPoäng.TabIndex = 3;
+            this.lblPoäng.Text = "Spelarpoäng: 0";
             // 
             // lblSpecialfall
             // 
@@ -155,7 +133,7 @@ namespace Yatzy_1
             this.chlbxSpecialfall.FormattingEnabled = true;
             this.chlbxSpecialfall.Location = new System.Drawing.Point(122, 104);
             this.chlbxSpecialfall.Name = "chlbxSpecialfall";
-            this.chlbxSpecialfall.Size = new System.Drawing.Size(182, 64);
+            this.chlbxSpecialfall.Size = new System.Drawing.Size(182, 154);
             this.chlbxSpecialfall.TabIndex = 6;
             // 
             // btnRulla
@@ -219,28 +197,17 @@ namespace Yatzy_1
             this.pctTärning1.TabStop = false;
             this.pctTärning1.Click += new System.EventHandler(this.pctTärning1_Click);
             // 
-            // lblPoäng
-            // 
-            this.lblPoäng.AutoSize = true;
-            this.lblPoäng.Location = new System.Drawing.Point(197, 80);
-            this.lblPoäng.Name = "lblPoäng";
-            this.lblPoäng.Size = new System.Drawing.Size(79, 13);
-            this.lblPoäng.TabIndex = 3;
-            this.lblPoäng.Text = "Spelarpoäng: 0";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(539, 288);
             this.Controls.Add(this.gbxSpel);
-            this.Controls.Add(this.gbxInstallningar);
             this.Controls.Add(this.gbxFramtid);
             this.Name = "Form1";
             this.Text = "Yatzy";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.gbxFramtid.ResumeLayout(false);
-            this.gbxInstallningar.ResumeLayout(false);
             this.gbxSpel.ResumeLayout(false);
             this.gbxSpel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pctTärning5)).EndInit();
@@ -255,7 +222,6 @@ namespace Yatzy_1
         #endregion
 
         private System.Windows.Forms.GroupBox gbxFramtid;
-        private System.Windows.Forms.GroupBox gbxInstallningar;
         private System.Windows.Forms.GroupBox gbxSpel;
         private System.Windows.Forms.PictureBox pctTärning5;
         private System.Windows.Forms.PictureBox pctTärning4;
@@ -264,8 +230,6 @@ namespace Yatzy_1
         private System.Windows.Forms.PictureBox pctTärning1;
         private System.Windows.Forms.Button btnRulla;
         private System.Windows.Forms.ListBox lbxFramtid;
-        private System.Windows.Forms.ListBox lbxTest;
-        private System.Windows.Forms.ListBox lbxHisto;
         private System.Windows.Forms.CheckedListBox chlbxSpecialfall;
         private System.Windows.Forms.Button btnKlar;
         private System.Windows.Forms.Label lblSpecialfall;
