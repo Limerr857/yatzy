@@ -47,6 +47,12 @@ namespace Yatzy_1
         // Skapa en bool som sparar om spelaren har valt ett specialfall och fått poäng för det.
         bool fåttPoäng = false;
 
+        // En bool som sparar om spelaren har fått bonuspoäng då de fick >63p sammanlagt från ettor, tvåor osv.
+        bool fåttBonuspoäng = false;
+
+        // Sparar hur många poäng som spelaren fått från ettor, tvåor osv. för att beräkna om spelaren borde få bonus.
+        int enklaPoäng = 0;
+
         // Skapa en dict som sparar de specialfall som har använts sedan spelet startades
         Dictionary<string, bool> användaSpecialfall = new Dictionary<string, bool>();
 
@@ -240,6 +246,12 @@ namespace Yatzy_1
             // Återställ huruvida spelaren har fått poäng
             fåttPoäng = false;
 
+            // Återställ om spelaren fått bonuspoäng
+            fåttBonuspoäng = false;
+
+            // Återställ spelarens poäng från ettor, tvåor osv. som används för att beräkna om spelaren borde få bonuspoäng
+            enklaPoäng = 0;
+
             ÅterställAnvändaSpecialfall();
         }
 
@@ -311,41 +323,60 @@ namespace Yatzy_1
             // Skapa en bool som är sann i slutet om alla if-satser nedan är falska
             bool ingaSpecial = true;
 
-            // Om det har blivit Yatzy och det inte tidigare blivit valt
-            if (vanligastRäkna == 5 && !användaSpecialfall["yatzy"])
+            // Om det har blivit Yatzy
+            if (vanligastRäkna == 5)
             {
-                // Lägg in att det blivit Yatzy i specialfall
-                specialfall.Add("yatzy");
+                // Lägg in att det blivit Yatzy i specialfall om det inte tidigare blivit valt
+                if (!användaSpecialfall["yatzy"])
+                {
+                    specialfall.Add("yatzy");
+                }
 
                 // Och spara att det har skett ett specialfall
                 ingaSpecial = false;
             }
 
-            // Om det blivit fyrtal och det inte tidigare blivit valt
-            if (vanligastRäkna >= 4 && !användaSpecialfall["fyrtal"])
+            // Om det blivit fyrtal
+            if (vanligastRäkna >= 4)
             {
-                specialfall.Add("fyrtal");
+                if (!användaSpecialfall["fyrtal"])
+                {
+                    specialfall.Add("fyrtal");
+                }
+
                 ingaSpecial = false;
             }
 
-            // Om det blivit tretal och det inte tidigare blivit valt
-            if (vanligastRäkna >= 3 && !användaSpecialfall["tretal"])
+            // Om det blivit tretal 
+            if (vanligastRäkna >= 3)
             {
-                specialfall.Add("tretal");
+                if (!användaSpecialfall["tretal"])
+                {
+                    specialfall.Add("tretal");
+                }
+
                 ingaSpecial = false;
             }
 
-            // Om det blivit ett par (2 lika) och det inte tidigare blivit valt
-            if (vanligastRäkna >= 2 && !användaSpecialfall["ett par"])
+            // Om det blivit ett par (2 lika) 
+            if (vanligastRäkna >= 2)
             {
-                specialfall.Add("ett par");
+                if (!användaSpecialfall["ett par"])
+                {
+                    specialfall.Add("ett par");
+                }
+
                 ingaSpecial = false;
             }
 
-            // Om det blivit kåk (3 + 2 lika) och det inte tidigare blivit valt
-            if (vanligastRäkna == 3 && andraVanligastRäkna == 2 && !användaSpecialfall["kåk"])
+            // Om det blivit kåk (3 + 2 lika)
+            if (vanligastRäkna == 3 && andraVanligastRäkna == 2)
             {
-                specialfall.Add("kåk");
+                if (!användaSpecialfall["kåk"])
+                {
+                    specialfall.Add("kåk");
+                }
+
                 ingaSpecial = false;
 
                 // Lägg dessutom in två varianter av "ett par" om det inte tidigare blivit valt
@@ -360,10 +391,14 @@ namespace Yatzy_1
                 }
             }
 
-            // Om det blivit två par (2 + 2 lika) och det inte tidigare blivit valt
-            if (vanligastRäkna >= 2 && andraVanligastRäkna == 2 && !användaSpecialfall["två par"])
+            // Om det blivit två par (2 + 2 lika)
+            if (vanligastRäkna >= 2 && andraVanligastRäkna == 2)
             {
-                specialfall.Add("två par");
+                if (!användaSpecialfall["två par"])
+                {
+                    specialfall.Add("två par");
+                }
+
                 ingaSpecial = false;
 
                 // Lägg dessutom in två varianter av "ett par" om det inte tidigare blivit valt
@@ -554,26 +589,34 @@ namespace Yatzy_1
                 case "sexor":
                     poängRunda = 6 * RäknaSiffror(6, tempTärningarVärde);
                     användaSpecialfall["sexor"] = true;
+                    // Lägg till poäng som används för att beräkna om spelaren
+                    // borde få en bonus eller inte
+                    enklaPoäng += poängRunda;
                     break;
                 case "femmor":
                     poängRunda = 5 * RäknaSiffror(5, tempTärningarVärde);
                     användaSpecialfall["femmor"] = true;
+                    enklaPoäng += poängRunda;
                     break;
                 case "fyror":
                     poängRunda = 4 * RäknaSiffror(4, tempTärningarVärde);
                     användaSpecialfall["fyror"] = true;
+                    enklaPoäng += poängRunda;
                     break;
                 case "treor":
                     poängRunda = 3 * RäknaSiffror(3, tempTärningarVärde);
                     användaSpecialfall["treor"] = true;
+                    enklaPoäng += poängRunda;
                     break;
                 case "tvåor":
                     poängRunda = 2 * RäknaSiffror(2, tempTärningarVärde);
                     användaSpecialfall["tvåor"] = true;
+                    enklaPoäng += poängRunda;
                     break;
                 case "ettor":
                     poängRunda = 1 * RäknaSiffror(1, tempTärningarVärde);
                     användaSpecialfall["ettor"] = true;
+                    enklaPoäng += poängRunda;
                     break;
 
                 default:
@@ -731,14 +774,28 @@ namespace Yatzy_1
             }
 
             // Slutför spelet om endast en checkbox är vald i chlbxSpecialfall
-            // OCH om spelaren inte har fått poäng tidigare
+            // OCH om spelaren inte har fått poäng tidigare under rundan
             if (counter == 1 && !fåttPoäng)
             {
                 // Lägger till poängen som tjänades under rundan
                 spelarPoäng += RundPoäng(tärningarVärde);
 
+                // Ger spelaren bonuspoäng om spelaren gjort sig förtjänt till det
+                if (enklaPoäng > 63)
+                {
+                    fåttBonuspoäng = true;
+                }
+
                 // Uppdaterar lblPoäng
-                lblPoäng.Text = "Spelarpoäng: " + spelarPoäng;
+                if (fåttBonuspoäng)
+                {
+                    lblPoäng.Text = "Spelarpoäng: " + spelarPoäng + "+50";
+                }
+                else
+                {
+                    lblPoäng.Text = "Spelarpoäng: " + spelarPoäng;
+                }
+                
 
                 // Spelaren har nu fått poäng för denna "runda", spara detta
                 fåttPoäng = true;
