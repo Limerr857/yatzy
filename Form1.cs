@@ -253,6 +253,12 @@ namespace Yatzy_1
             enklaPoäng = 0;
 
             ÅterställAnvändaSpecialfall();
+
+            // Återställ de använda specialfallen i chlbxMöjligheter
+            for (int i = 0; i < chlbxMöjligheter.Items.Count; i++)
+            {
+                chlbxMöjligheter.SetItemChecked(i, false);
+            }
         }
 
         private void SlumpaTärningsfärg(bool återställ, int[] tärningarStatus)
@@ -717,6 +723,11 @@ namespace Yatzy_1
             användaSpecialfall.Add("treor", false);
             användaSpecialfall.Add("tvåor", false);
             användaSpecialfall.Add("ettor", false);
+        }
+
+        private void UppdateraAnvändaSpecialfall(string specialfall)
+        {
+            claeeaeafshgj
         }
 
         private void pctTärning1_Click(object sender, EventArgs e)
