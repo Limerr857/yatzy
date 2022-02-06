@@ -725,9 +725,75 @@ namespace Yatzy_1
             användaSpecialfall.Add("ettor", false);
         }
 
-        private void UppdateraAnvändaSpecialfall(string specialfall)
+        private void UppdateraAnvändaSpecialfall(Dictionary<string, bool> specialfall)
         {
-            claeeaeafshgj
+            // En metod som uppdaterar de använda specialfallen i chlbxMöjligheter
+
+            for (int i = 0; i < specialfall.Count; i++)
+            {
+
+            }
+
+
+            /*
+            switch (specialfall)
+            {
+                case "yatzy":
+                    // "Yatzy" blir checkad.
+                    chlbxMöjligheter.SetItemChecked(15, true);
+                    break;
+                case "chans":
+                    chlbxMöjligheter.SetItemChecked(14, true);
+                    break;
+                case "stor stege":
+                    chlbxMöjligheter.SetItemChecked(13, true);
+                    break;
+                case "liten stege":
+                    chlbxMöjligheter.SetItemChecked(12, true);
+                    break;
+                case "kåk":
+                    chlbxMöjligheter.SetItemChecked(11, true);
+                    break;
+                case "fyrtal":
+                    chlbxMöjligheter.SetItemChecked(10, true);
+                    break;
+                case "triss":
+                    chlbxMöjligheter.SetItemChecked(9, true);
+                    break;
+                case "två par":
+                    chlbxMöjligheter.SetItemChecked(8, true);
+                    break;
+                case "ett par":
+                    chlbxMöjligheter.SetItemChecked(7, true);
+                    break;
+                // Bonus sätts som checkad på en annan plats TODO: sätt den som checkad på annan plats eller lägg hit den.
+                case "sexor":
+                    chlbxMöjligheter.SetItemChecked(5, true);
+                    break;
+                case "femmor":
+                    chlbxMöjligheter.SetItemChecked(4, true);
+                    break;
+                case "fyror":
+                    chlbxMöjligheter.SetItemChecked(3, true);
+                    break;
+                case "treor":
+                    chlbxMöjligheter.SetItemChecked(2, true);
+                    break;
+                case "tvåor":
+                    chlbxMöjligheter.SetItemChecked(1, true);
+                    break;
+                case "ettor":
+                    chlbxMöjligheter.SetItemChecked(0, true);
+                    break;
+
+
+                default:
+                    break;
+                
+
+            }
+            */
+
         }
 
         private void pctTärning1_Click(object sender, EventArgs e)
@@ -810,6 +876,14 @@ namespace Yatzy_1
 
                 // Spelaren har nu fått poäng för denna "runda", spara detta
                 fåttPoäng = true;
+
+                // Uppdatera specialfallen som har blivit använda
+                /*for (int i = 0; i < chlbxSpecialfall.Items.Count; i++)
+                {
+                    UppdateraAnvändaSpecialfall(användaSpecialfall);
+                }*/
+
+                UppdateraAnvändaSpecialfall(användaSpecialfall);
 
                 // Återställer spelet för nästa runda
                 RundanKlar();
