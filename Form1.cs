@@ -179,6 +179,13 @@ namespace Yatzy_1
             // Lägg in de möjliga specialfallen i chlbx genom metoden MöjligaSpecialfall
             chlbxSpecialfall.Items.AddRange(MöjligaSpecialfall(tärningarVärde).ToArray());
 
+            // Avsluta spelet om spelaren inte har några fler valmöjligheter.
+            // (Inga kast kvar och inga valbara specialfall)
+            if (kastKvar == 0 && MöjligaSpecialfall(tärningarVärde).Count == 0)
+            {
+                AvslutaSpelet(false, spelarPoäng, fåttBonuspoäng);
+            }
+
         }
 
         private void UppdateraGrafik(Image[] tärningarGrafik, int[] tärningarVärde)
@@ -725,75 +732,64 @@ namespace Yatzy_1
             användaSpecialfall.Add("ettor", false);
         }
 
-        private void UppdateraAnvändaSpecialfall(Dictionary<string, bool> specialfall)
+        private void UppdateraAnvändaSpecialfall(Dictionary<string, bool> specialfall, bool fåttBonuspoäng)
         {
             // En metod som uppdaterar de använda specialfallen i chlbxMöjligheter
 
-            for (int i = 0; i < specialfall.Count; i++)
+            if (specialfall["yatzy"])
             {
+                // Bocka av yatzy från möjliga specialfall om det används
+                chlbxMöjligheter.SetItemChecked(15, true);
+            }
+            if (specialfall["chans"])       { chlbxMöjligheter.SetItemChecked(14, true); }
+            if (specialfall["stor stege"])  { chlbxMöjligheter.SetItemChecked(13, true); }
+            if (specialfall["liten stege"]) { chlbxMöjligheter.SetItemChecked(12, true); }
+            if (specialfall["kåk"])         { chlbxMöjligheter.SetItemChecked(11, true); }
+            if (specialfall["fyrtal"])      { chlbxMöjligheter.SetItemChecked(10, true); }
+            if (specialfall["tretal"])      { chlbxMöjligheter.SetItemChecked(9, true); }
+            if (specialfall["två par"])     { chlbxMöjligheter.SetItemChecked(8, true); }
+            if (specialfall["ett par"])     { chlbxMöjligheter.SetItemChecked(7, true); }
+            // Sätt bonus som "valt" om spelaren fått bonusen
+            if (fåttBonuspoäng)             { chlbxMöjligheter.SetItemChecked(6, true); }
+            if (specialfall["sexor"])       { chlbxMöjligheter.SetItemChecked(5, true); }
+            if (specialfall["femmor"])      { chlbxMöjligheter.SetItemChecked(4, true); }
+            if (specialfall["fyror"])       { chlbxMöjligheter.SetItemChecked(3, true); }
+            if (specialfall["treor"])       { chlbxMöjligheter.SetItemChecked(2, true); }
+            if (specialfall["tvåor"])       { chlbxMöjligheter.SetItemChecked(1, true); }
+            if (specialfall["ettor"])       { chlbxMöjligheter.SetItemChecked(0, true); }            
 
+        }
+
+        private void AvslutaSpelet(bool vinst, int spelarpoäng, bool fåttBonuspoäng)
+        {
+            // Metoden körs när spelaren antingen vunnit eller förlorat,
+            // och återställer allt, beräknar slutpoängen och visar vinst/förlorarmeddelande
+
+
+            // Beräkna spelarens slutpoäng
+            int slutpoäng = spelarpoäng;
+            if (fåttBonuspoäng)
+            {
+                slutpoäng += 50;
             }
 
-
-            /*
-            switch (specialfall)
+            // Vinstmeddelande
+            // Vänta först en liten stund för att låta spelaren reflektera över vad de har gjort
+            Thread.Sleep(1000);
+            if (vinst)
             {
-                case "yatzy":
-                    // "Yatzy" blir checkad.
-                    chlbxMöjligheter.SetItemChecked(15, true);
-                    break;
-                case "chans":
-                    chlbxMöjligheter.SetItemChecked(14, true);
-                    break;
-                case "stor stege":
-                    chlbxMöjligheter.SetItemChecked(13, true);
-                    break;
-                case "liten stege":
-                    chlbxMöjligheter.SetItemChecked(12, true);
-                    break;
-                case "kåk":
-                    chlbxMöjligheter.SetItemChecked(11, true);
-                    break;
-                case "fyrtal":
-                    chlbxMöjligheter.SetItemChecked(10, true);
-                    break;
-                case "triss":
-                    chlbxMöjligheter.SetItemChecked(9, true);
-                    break;
-                case "två par":
-                    chlbxMöjligheter.SetItemChecked(8, true);
-                    break;
-                case "ett par":
-                    chlbxMöjligheter.SetItemChecked(7, true);
-                    break;
-                // Bonus sätts som checkad på en annan plats TODO: sätt den som checkad på annan plats eller lägg hit den.
-                case "sexor":
-                    chlbxMöjligheter.SetItemChecked(5, true);
-                    break;
-                case "femmor":
-                    chlbxMöjligheter.SetItemChecked(4, true);
-                    break;
-                case "fyror":
-                    chlbxMöjligheter.SetItemChecked(3, true);
-                    break;
-                case "treor":
-                    chlbxMöjligheter.SetItemChecked(2, true);
-                    break;
-                case "tvåor":
-                    chlbxMöjligheter.SetItemChecked(1, true);
-                    break;
-                case "ettor":
-                    chlbxMöjligheter.SetItemChecked(0, true);
-                    break;
-
-
-                default:
-                    break;
-                
-
+                MessageBox.Show("Du vann!, Slutpoäng: " + slutpoäng);
             }
-            */
+            else
+            {
+                // Vänta ännu lite längre för att lära spelaren en läxa
+                Thread.Sleep(1000);
+                MessageBox.Show("Du fick slut på valmöjligheter!, Slutpoäng: " + slutpoäng);
+            }
 
+            // Återställer spelet
+            // TODO: Ta bort invariablarna här
+            LaddaSpelet(tärningarVärde, tärningarStatus, tärningarGrafik, historikLista);
         }
 
         private void pctTärning1_Click(object sender, EventArgs e)
@@ -878,15 +874,17 @@ namespace Yatzy_1
                 fåttPoäng = true;
 
                 // Uppdatera specialfallen som har blivit använda
-                /*for (int i = 0; i < chlbxSpecialfall.Items.Count; i++)
-                {
-                    UppdateraAnvändaSpecialfall(användaSpecialfall);
-                }*/
-
-                UppdateraAnvändaSpecialfall(användaSpecialfall);
+                UppdateraAnvändaSpecialfall(användaSpecialfall, fåttBonuspoäng);
 
                 // Återställer spelet för nästa runda
                 RundanKlar();
+
+                // Avsluta spelet om spelaren har gjort klart alla specialfall.
+                // (Om värdet på alla specialfall i användaSpecialfall är true)
+                if (användaSpecialfall.Values.All(value => value))
+                {
+                    AvslutaSpelet(true, spelarPoäng, fåttBonuspoäng);
+                }
             }
         }
     }

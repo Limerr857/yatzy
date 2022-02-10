@@ -30,6 +30,7 @@ namespace Yatzy_1
         private void InitializeComponent()
         {
             this.gbxMöjligheter = new System.Windows.Forms.GroupBox();
+            this.chlbxMöjligheter = new System.Windows.Forms.CheckedListBox();
             this.gbxSpel = new System.Windows.Forms.GroupBox();
             this.lblPoäng = new System.Windows.Forms.Label();
             this.lblSpecialfall = new System.Windows.Forms.Label();
@@ -42,7 +43,6 @@ namespace Yatzy_1
             this.pctTärning3 = new System.Windows.Forms.PictureBox();
             this.pctTärning2 = new System.Windows.Forms.PictureBox();
             this.pctTärning1 = new System.Windows.Forms.PictureBox();
-            this.chlbxMöjligheter = new System.Windows.Forms.CheckedListBox();
             this.gbxMöjligheter.SuspendLayout();
             this.gbxSpel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pctTärning5)).BeginInit();
@@ -61,6 +61,33 @@ namespace Yatzy_1
             this.gbxMöjligheter.TabIndex = 0;
             this.gbxMöjligheter.TabStop = false;
             this.gbxMöjligheter.Text = "Använda Specialfall:";
+            // 
+            // chlbxMöjligheter
+            // 
+            this.chlbxMöjligheter.CheckOnClick = true;
+            this.chlbxMöjligheter.FormattingEnabled = true;
+            this.chlbxMöjligheter.Items.AddRange(new object[] {
+            "Ettor",
+            "Tvåor",
+            "Treor",
+            "Fyror",
+            "Femmor",
+            "Sexor",
+            "BONUS",
+            "Par",
+            "Två Par",
+            "Triss",
+            "Fyrtal",
+            "Kåk",
+            "Liten Stege",
+            "Stor Stege",
+            "Chans",
+            "Yatzy"});
+            this.chlbxMöjligheter.Location = new System.Drawing.Point(6, 19);
+            this.chlbxMöjligheter.Name = "chlbxMöjligheter";
+            this.chlbxMöjligheter.SelectionMode = System.Windows.Forms.SelectionMode.None;
+            this.chlbxMöjligheter.Size = new System.Drawing.Size(187, 244);
+            this.chlbxMöjligheter.TabIndex = 7;
             // 
             // gbxSpel
             // 
@@ -188,32 +215,6 @@ namespace Yatzy_1
             this.pctTärning1.TabIndex = 0;
             this.pctTärning1.TabStop = false;
             this.pctTärning1.Click += new System.EventHandler(this.pctTärning1_Click);
-            // 
-            // chlbxMöjligheter
-            // 
-            this.chlbxMöjligheter.CheckOnClick = true;
-            this.chlbxMöjligheter.FormattingEnabled = true;
-            this.chlbxMöjligheter.Items.AddRange(new object[] {
-            "Ettor",
-            "Tvåor",
-            "Treor",
-            "Fyror",
-            "Femmor",
-            "Sexor",
-            "BONUS",
-            "Par",
-            "Två Par",
-            "Triss",
-            "Fyrtal",
-            "Kåk",
-            "Liten Stege",
-            "Stor Stege",
-            "Chans",
-            "Yatzy"});
-            this.chlbxMöjligheter.Location = new System.Drawing.Point(6, 19);
-            this.chlbxMöjligheter.Name = "chlbxMöjligheter";
-            this.chlbxMöjligheter.Size = new System.Drawing.Size(187, 244);
-            this.chlbxMöjligheter.TabIndex = 7;
             // 
             // Form1
             // 
