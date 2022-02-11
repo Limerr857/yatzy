@@ -34,24 +34,25 @@ namespace Yatzy_1
         // Skapa en array med alla färger i KnownColor
         KnownColor[] färgnamn = (KnownColor[])Enum.GetValues(typeof(KnownColor));
 
-        // Skapa en lista med array:er av alla tidigare tärningsslag
-        // TODO: Ta bort??
-        List<Array> historikLista = new List<Array>();
-
         // Skapa en int som sparar spelarens total poäng
-        int spelarPoäng = 0;
+        // Återställs till 0 när spelet startas
+        int spelarPoäng;
 
         // Skapa en int som räknar hur många kast spelaren har kvar
-        int kastKvar = 3;
+        // Återställs till 3 när spelet startas
+        int kastKvar;
 
         // Skapa en bool som sparar om spelaren har valt ett specialfall och fått poäng för det.
-        bool fåttPoäng = false;
+        // Återställs till false när spelet startas
+        bool fåttPoäng;
 
-        // En bool som sparar om spelaren har fått bonuspoäng då de fick >63p sammanlagt från ettor, tvåor osv.
-        bool fåttBonuspoäng = false;
+        // En bool som sparar om spelaren har fått bonuspoäng då de fick >63p sammanlagt från Ettor, Tvåor osv.
+        // Återställs till false när spelet startas
+        bool fåttBonuspoäng;
 
-        // Sparar hur många poäng som spelaren fått från ettor, tvåor osv. för att beräkna om spelaren borde få bonus.
-        int enklaPoäng = 0;
+        // Sparar hur många poäng som spelaren fått från Ettor, Tvåor osv. för att beräkna om spelaren borde få bonus.
+        // Återställs till 0 när spelet startas
+        int enklaPoäng;
 
         // Skapa en dict som sparar de specialfall som har använts sedan spelet startades
         Dictionary<string, bool> användaSpecialfall = new Dictionary<string, bool>();
@@ -66,19 +67,16 @@ namespace Yatzy_1
             // Rulla bara tärningarna om spelaren har kast kvar
             if (kastKvar > 0)
             {
-                KastaTärningarna(tärningarGrafik, tärningarVärde, historikLista);
-
-                // TODO: ta bort???
-                UppdateraGrafik(tärningarGrafik, tärningarVärde);
+                KastaTärningarna(tärningarGrafik, tärningarVärde);
             }
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            LaddaSpelet(tärningarVärde, tärningarStatus, tärningarGrafik, historikLista);
+            LaddaSpelet();
         }
 
-        private void KastaTärningarna(Image[] tärningarGrafik, int[] tärningarVärde, List<Array> historikLista)
+        private void KastaTärningarna(Image[] tärningarGrafik, int[] tärningarVärde)
         {
             // Sätt alla tärningars status till "Rullar" (2)
             // om deras status är "inte vald" (0)
@@ -114,13 +112,6 @@ namespace Yatzy_1
             // Starta en loop med tärningsgrafik
             while (rullar)
             {
-
-                // Om alla tärningar har slutat rulla, stoppa loopen
-                if (!tärningarStatus.Contains(2))
-                {
-                    rullar = false;
-                }
-
                 // Byt nummer på alla tärningar slumpmässigt
                 for (int i = 0; i < 5; i++)
                 {
@@ -155,6 +146,12 @@ namespace Yatzy_1
                         }
                     }
                 }
+
+                // Om alla tärningar har slutat rulla, stoppa loopen
+                if (!tärningarStatus.Contains(2))
+                {
+                    rullar = false;
+                }
             }
 
             // Sätt på "Rulla!" knappen efter tärningarna har rullats
@@ -162,9 +159,6 @@ namespace Yatzy_1
 
             // Och återställ tärningarnas bakgrundsfärg
             SlumpaTärningsfärg(true, tärningarStatus);
-
-            // Lägg till resultatet i historiken
-            historikLista.Add(tärningarVärde);
 
             // Efter tärningarna har rullats kan alla tärningarnas status
             // återställas till "inte vald" (0)
@@ -213,7 +207,7 @@ namespace Yatzy_1
             pctTärning5.BorderStyle = BorderStyle.None;
         }
 
-        private void LaddaSpelet(int[] tärningarVärde, int[] tärningarStatus, Image[] tärningarGrafik, List<Array> historikLista)
+        private void LaddaSpelet()
         {
             // Återställ array:en som innehåller tärningarnas värde
             // Siffran som visas på tärningen 0 = ingen siffra
@@ -232,9 +226,6 @@ namespace Yatzy_1
 
             // Återställ tärningsgrafiken
             UppdateraGrafik(tärningarGrafik, tärningarVärde);
-
-            // Återställ tärningshistoriken
-            historikLista.Clear();
 
             // Återställ tärningarnas borderstyle,
             // avmarkerar alla tärningar
@@ -256,7 +247,7 @@ namespace Yatzy_1
             // Återställ om spelaren fått bonuspoäng
             fåttBonuspoäng = false;
 
-            // Återställ spelarens poäng från ettor, tvåor osv. som används för att beräkna om spelaren borde få bonuspoäng
+            // Återställ spelarens poäng från Ettor, Tvåor osv. som används för att beräkna om spelaren borde få bonuspoäng
             enklaPoäng = 0;
 
             ÅterställAnvändaSpecialfall();
@@ -266,6 +257,9 @@ namespace Yatzy_1
             {
                 chlbxMöjligheter.SetItemChecked(i, false);
             }
+
+            // Återställ lblPoäng
+            lblPoäng.Text = "Spelarpoäng: 0";
         }
 
         private void SlumpaTärningsfärg(bool återställ, int[] tärningarStatus)
@@ -316,22 +310,11 @@ namespace Yatzy_1
             // Skapa en lista som sparar de möjliga specialfallen
             List<string> specialfall = new List<string>();
 
-            // Skapa en int som mäter hur många gånger den
-            // vanligaste siffran finns i tempTärningarVärde
-            int vanligastRäkna = 0;
-
-            // Och en int som sparar värdet på siffran
-            int vanligastSiffra = 0;
-
             // Räkna det vanligaste värdet i tempTärningarVärde
-            RäknaVanligasteVärdet(ref vanligastRäkna, ref vanligastSiffra, tempTärningarVärde);
-
-            // Samma sak som vanligast fast med den andra vanligaste siffran
-            int andraVanligastRäkna = 0;
-            int andraVanligastSiffra = 0;
+            RäknaVanligasteVärdet(out int vanligastRäkna, out int vanligastSiffra, tempTärningarVärde);
 
             // Räkna den andra vanligaste värdet i tempTärningarVärde
-            RäknaAndraVärdet(ref andraVanligastRäkna, ref andraVanligastSiffra, tempTärningarVärde, vanligastSiffra);
+            RäknaAndraVärdet(out int andraVanligastRäkna, out int andraVanligastSiffra, tempTärningarVärde, vanligastSiffra);
 
             // Skapa en bool som är sann i slutet om alla if-satser nedan är falska
             bool ingaSpecial = true;
@@ -340,43 +323,43 @@ namespace Yatzy_1
             if (vanligastRäkna == 5)
             {
                 // Lägg in att det blivit Yatzy i specialfall om det inte tidigare blivit valt
-                if (!användaSpecialfall["yatzy"])
+                if (!användaSpecialfall["Yatzy"])
                 {
-                    specialfall.Add("yatzy");
+                    specialfall.Add("Yatzy");
                 }
 
                 // Och spara att det har skett ett specialfall
                 ingaSpecial = false;
             }
 
-            // Om det blivit fyrtal
+            // Om det blivit Fyrtal
             if (vanligastRäkna >= 4)
             {
-                if (!användaSpecialfall["fyrtal"])
+                if (!användaSpecialfall["Fyrtal"])
                 {
-                    specialfall.Add("fyrtal");
+                    specialfall.Add("Fyrtal");
                 }
 
                 ingaSpecial = false;
             }
 
-            // Om det blivit tretal 
+            // Om det blivit Tretal 
             if (vanligastRäkna >= 3)
             {
-                if (!användaSpecialfall["tretal"])
+                if (!användaSpecialfall["Tretal"])
                 {
-                    specialfall.Add("tretal");
+                    specialfall.Add("Tretal");
                 }
 
                 ingaSpecial = false;
             }
 
-            // Om det blivit ett par (2 lika) 
+            // Om det blivit Par (2 lika) 
             if (vanligastRäkna >= 2)
             {
-                if (!användaSpecialfall["ett par"])
+                if (!användaSpecialfall["Par"])
                 {
-                    specialfall.Add("ett par");
+                    specialfall.Add("Par");
                 }
 
                 ingaSpecial = false;
@@ -392,37 +375,37 @@ namespace Yatzy_1
 
                 ingaSpecial = false;
 
-                // Lägg dessutom in två varianter av "ett par" om det inte tidigare blivit valt
+                // Lägg dessutom in två varianter av "Par" om det inte tidigare blivit valt
                 // så att båda paren kan väljas individuellt.
-                if (!användaSpecialfall["ett par"])
+                if (!användaSpecialfall["Par"])
                 {
-                    // Ta allra först bort "ett par"
-                    specialfall.Remove("ett par");
+                    // Ta allra först bort "Par"
+                    specialfall.Remove("Par");
 
-                    specialfall.Add("ett par stor");
-                    specialfall.Add("ett par liten");
+                    specialfall.Add("Par Stor");
+                    specialfall.Add("Par Liten");
                 }
             }
 
-            // Om det blivit två par (2 + 2 lika)
+            // Om det blivit Två Par (2 + 2 lika)
             if (vanligastRäkna >= 2 && andraVanligastRäkna == 2)
             {
-                if (!användaSpecialfall["två par"])
+                if (!användaSpecialfall["Två Par"])
                 {
-                    specialfall.Add("två par");
+                    specialfall.Add("Två Par");
                 }
 
                 ingaSpecial = false;
 
-                // Lägg dessutom in två varianter av "ett par" om det inte tidigare blivit valt
+                // Lägg dessutom in två varianter av "Par" om det inte tidigare blivit valt
                 // så att båda paren kan väljas individuellt.
-                if (!användaSpecialfall["ett par"])
+                if (!användaSpecialfall["Par"])
                 {
-                    // Ta allra först bort "ett par"
-                    specialfall.Remove("ett par");
+                    // Ta allra först bort "Par"
+                    specialfall.Remove("Par");
 
-                    specialfall.Add("ett par stor");
-                    specialfall.Add("ett par liten");
+                    specialfall.Add("Par Stor");
+                    specialfall.Add("Par Liten");
                 }
             }
 
@@ -445,45 +428,45 @@ namespace Yatzy_1
             }
 
             // Om minst en etta förekommer och det inte tidigare blivit valt
-            if (tempTärningarVärde.Contains(1) && !användaSpecialfall["ettor"])
+            if (tempTärningarVärde.Contains(1) && !användaSpecialfall["Ettor"])
             {
-                specialfall.Add("ettor");
+                specialfall.Add("Ettor");
             }
 
             // Om minst en tvåa förekommer och det inte tidigare blivit valt
-            if (tempTärningarVärde.Contains(2) && !användaSpecialfall["tvåor"])
+            if (tempTärningarVärde.Contains(2) && !användaSpecialfall["Tvåor"])
             {
-                specialfall.Add("tvåor");
+                specialfall.Add("Tvåor");
             }
 
             // Om minst en trea förekommer och det inte tidigare blivit valt
-            if (tempTärningarVärde.Contains(3) && !användaSpecialfall["treor"])
+            if (tempTärningarVärde.Contains(3) && !användaSpecialfall["Treor"])
             {
-                specialfall.Add("treor");
+                specialfall.Add("Treor");
             }
 
             // Om minst en fyra förekommer och det inte tidigare blivit valt
-            if (tempTärningarVärde.Contains(4) && !användaSpecialfall["fyror"])
+            if (tempTärningarVärde.Contains(4) && !användaSpecialfall["Fyror"])
             {
-                specialfall.Add("fyror");
+                specialfall.Add("Fyror");
             }
 
             // Om minst en femma förekommer och det inte tidigare blivit valt
-            if (tempTärningarVärde.Contains(5) && !användaSpecialfall["femmor"])
+            if (tempTärningarVärde.Contains(5) && !användaSpecialfall["Femmor"])
             {
-                specialfall.Add("femmor");
+                specialfall.Add("Femmor");
             }
 
             // Om minst en sexa förekommer och det inte tidigare blivit valt
-            if (tempTärningarVärde.Contains(6) && !användaSpecialfall["sexor"])
+            if (tempTärningarVärde.Contains(6) && !användaSpecialfall["Sexor"])
             {
-                specialfall.Add("sexor");
+                specialfall.Add("Sexor");
             }
 
             // Ge alltid en sista chans enligt spelreglerna om det inte tidigare blivit valt
-            if (!användaSpecialfall["chans"])
+            if (!användaSpecialfall["Chans"])
             {
-                specialfall.Add("chans");
+                specialfall.Add("Chans");
             }
 
             // return poäng, specialfall
@@ -542,26 +525,22 @@ namespace Yatzy_1
             // Spara spelarens poäng denna runda i en variabel
             int poängRunda = 0;
 
-            // Hitta och räkna den vanligaste siffran TODO: FLytta upp här och vid ett annat ställe till toppen av dokumentet
-            int vanligastRäkna = 0;
-            int vanligastSiffra = 0;
-            RäknaVanligasteVärdet(ref vanligastRäkna, ref vanligastSiffra, tempTärningarVärde);
+            // Hitta och räkna den vanligaste siffran
+            RäknaVanligasteVärdet(out int vanligastRäkna, out int vanligastSiffra, tempTärningarVärde);
 
-            // Hitta och räkna den andra vanligaste siffran TODO: FLytta upp här och vid ett annat ställe till toppen av dokumentet
-            int andraVanligastRäkna = 0;
-            int andraVanligastSiffra = 0;
-            RäknaAndraVärdet(ref andraVanligastRäkna, ref andraVanligastSiffra, tempTärningarVärde, vanligastSiffra);
+            // Hitta och räkna den andra vanligaste siffran
+            RäknaAndraVärdet(out int andraVanligastRäkna, out int andraVanligastSiffra, tempTärningarVärde, vanligastSiffra);
 
             // Beräkna spelarens poäng och sätt vilket specialfall som faktiskt valts
             switch (chlbxSpecialfall.CheckedItems[0].ToString())
             {
-                case "yatzy":
+                case "Yatzy":
                     poängRunda = 50;
-                    användaSpecialfall["yatzy"] = true;
+                    användaSpecialfall["Yatzy"] = true;
                     break;
-                case "chans":
+                case "Chans":
                     poängRunda = tempTärningarVärde.Sum();
-                    användaSpecialfall["chans"] = true;
+                    användaSpecialfall["Chans"] = true;
                     break;
                 case "stor stege":
                     poängRunda = tempTärningarVärde.Sum();
@@ -575,60 +554,60 @@ namespace Yatzy_1
                     poängRunda = tempTärningarVärde.Sum();
                     användaSpecialfall["kåk"] = true;
                     break;
-                case "fyrtal":
+                case "Fyrtal":
                     poängRunda = 4 * vanligastSiffra;
-                    användaSpecialfall["fyrtal"] = true;
+                    användaSpecialfall["Fyrtal"] = true;
                     break;
-                case "tretal":
+                case "Tretal":
                     poängRunda = 3 * vanligastSiffra;
-                    användaSpecialfall["tretal"] = true;
+                    användaSpecialfall["Tretal"] = true;
                     break;
-                case "två par":
+                case "Två Par":
                     poängRunda = 2 * vanligastSiffra + 2 * andraVanligastSiffra;
-                    användaSpecialfall["två par"] = true;
+                    användaSpecialfall["Två Par"] = true;
                     break;
-                case "ett par":
+                case "Par":
                     poängRunda = 2 * vanligastSiffra;
-                    användaSpecialfall["ett par"] = true;
+                    användaSpecialfall["Par"] = true;
                     break;
-                case "ett par stor":
+                case "Par Stor":
                     poängRunda = 2 * vanligastSiffra;
-                    användaSpecialfall["ett par"] = true;
+                    användaSpecialfall["Par"] = true;
                     break;
-                case "ett par liten":
+                case "Par Liten":
                     poängRunda = 2 * andraVanligastSiffra;
-                    användaSpecialfall["ett par"] = true;
+                    användaSpecialfall["Par"] = true;
                     break;
-                case "sexor":
+                case "Sexor":
                     poängRunda = 6 * RäknaSiffror(6, tempTärningarVärde);
-                    användaSpecialfall["sexor"] = true;
+                    användaSpecialfall["Sexor"] = true;
                     // Lägg till poäng som används för att beräkna om spelaren
                     // borde få en bonus eller inte
                     enklaPoäng += poängRunda;
                     break;
-                case "femmor":
+                case "Femmor":
                     poängRunda = 5 * RäknaSiffror(5, tempTärningarVärde);
-                    användaSpecialfall["femmor"] = true;
+                    användaSpecialfall["Femmor"] = true;
                     enklaPoäng += poängRunda;
                     break;
-                case "fyror":
+                case "Fyror":
                     poängRunda = 4 * RäknaSiffror(4, tempTärningarVärde);
-                    användaSpecialfall["fyror"] = true;
+                    användaSpecialfall["Fyror"] = true;
                     enklaPoäng += poängRunda;
                     break;
-                case "treor":
+                case "Treor":
                     poängRunda = 3 * RäknaSiffror(3, tempTärningarVärde);
-                    användaSpecialfall["treor"] = true;
+                    användaSpecialfall["Treor"] = true;
                     enklaPoäng += poängRunda;
                     break;
-                case "tvåor":
+                case "Tvåor":
                     poängRunda = 2 * RäknaSiffror(2, tempTärningarVärde);
-                    användaSpecialfall["tvåor"] = true;
+                    användaSpecialfall["Tvåor"] = true;
                     enklaPoäng += poängRunda;
                     break;
-                case "ettor":
+                case "Ettor":
                     poängRunda = 1 * RäknaSiffror(1, tempTärningarVärde);
-                    användaSpecialfall["ettor"] = true;
+                    användaSpecialfall["Ettor"] = true;
                     enklaPoäng += poängRunda;
                     break;
 
@@ -670,8 +649,14 @@ namespace Yatzy_1
             return antal;
         }
 
-        private void RäknaVanligasteVärdet(ref int vanligastRäkna, ref int vanligastSiffra, int[] tempTärningarVärde) 
+        private void RäknaVanligasteVärdet(out int vanligastRäkna, out int vanligastSiffra, int[] tempTärningarVärde) 
         {
+            // Skapa två variabler 
+            // Som sparar hur ofta den vanligaste siffran förekommer
+            // och vilken den vanligaste siffran är
+            vanligastRäkna = 0;
+            vanligastSiffra = 0;
+
             // Och beräkna båda variablarnas värden
             for (int i = 0; i < tempTärningarVärde.Count(); i++)
             {
@@ -688,8 +673,14 @@ namespace Yatzy_1
             return;
         }
 
-        private void RäknaAndraVärdet(ref int andraVanligastRäkna, ref int andraVanligastSiffra, int[] tempTärningarVärde, int vanligastSiffra)
+        private void RäknaAndraVärdet(out int andraVanligastRäkna, out int andraVanligastSiffra, int[] tempTärningarVärde, int vanligastSiffra)
         {
+            // Skapa två variabler 
+            // Som sparar hur ofta den andra vanligaste siffran förekommer
+            // och vilken den andra vanligaste siffran är
+            andraVanligastRäkna = 0;
+            andraVanligastSiffra = 0;
+
             // Skapa en ny array från tempTärningarVärde
             int[] tempTärningarVärdeAndra = (int[])tempTärningarVärde.Clone();
 
@@ -715,48 +706,48 @@ namespace Yatzy_1
         public void ÅterställAnvändaSpecialfall()
         {
             användaSpecialfall.Clear();
-            användaSpecialfall.Add("yatzy", false);
-            användaSpecialfall.Add("chans", false);
+            användaSpecialfall.Add("Yatzy", false);
+            användaSpecialfall.Add("Chans", false);
             användaSpecialfall.Add("stor stege", false);
             användaSpecialfall.Add("liten stege", false);
             användaSpecialfall.Add("kåk", false);
-            användaSpecialfall.Add("fyrtal", false);
-            användaSpecialfall.Add("tretal", false);
-            användaSpecialfall.Add("två par", false);
-            användaSpecialfall.Add("ett par", false);
-            användaSpecialfall.Add("sexor", false);
-            användaSpecialfall.Add("femmor", false);
-            användaSpecialfall.Add("fyror", false);
-            användaSpecialfall.Add("treor", false);
-            användaSpecialfall.Add("tvåor", false);
-            användaSpecialfall.Add("ettor", false);
+            användaSpecialfall.Add("Fyrtal", false);
+            användaSpecialfall.Add("Tretal", false);
+            användaSpecialfall.Add("Två Par", false);
+            användaSpecialfall.Add("Par", false);
+            användaSpecialfall.Add("Sexor", false);
+            användaSpecialfall.Add("Femmor", false);
+            användaSpecialfall.Add("Fyror", false);
+            användaSpecialfall.Add("Treor", false);
+            användaSpecialfall.Add("Tvåor", false);
+            användaSpecialfall.Add("Ettor", false);
         }
 
         private void UppdateraAnvändaSpecialfall(Dictionary<string, bool> specialfall, bool fåttBonuspoäng)
         {
             // En metod som uppdaterar de använda specialfallen i chlbxMöjligheter
 
-            if (specialfall["yatzy"])
+            if (specialfall["Yatzy"] == true)
             {
-                // Bocka av yatzy från möjliga specialfall om det används
+                // Bocka av Yatzy från möjliga specialfall om det används
                 chlbxMöjligheter.SetItemChecked(15, true);
             }
-            if (specialfall["chans"])       { chlbxMöjligheter.SetItemChecked(14, true); }
+            if (specialfall["Chans"])       { chlbxMöjligheter.SetItemChecked(14, true); }
             if (specialfall["stor stege"])  { chlbxMöjligheter.SetItemChecked(13, true); }
             if (specialfall["liten stege"]) { chlbxMöjligheter.SetItemChecked(12, true); }
             if (specialfall["kåk"])         { chlbxMöjligheter.SetItemChecked(11, true); }
-            if (specialfall["fyrtal"])      { chlbxMöjligheter.SetItemChecked(10, true); }
-            if (specialfall["tretal"])      { chlbxMöjligheter.SetItemChecked(9, true); }
-            if (specialfall["två par"])     { chlbxMöjligheter.SetItemChecked(8, true); }
-            if (specialfall["ett par"])     { chlbxMöjligheter.SetItemChecked(7, true); }
+            if (specialfall["Fyrtal"])      { chlbxMöjligheter.SetItemChecked(10, true); }
+            if (specialfall["Tretal"])      { chlbxMöjligheter.SetItemChecked(9, true); }
+            if (specialfall["Två Par"])     { chlbxMöjligheter.SetItemChecked(8, true); }
+            if (specialfall["Par"])     { chlbxMöjligheter.SetItemChecked(7, true); }
             // Sätt bonus som "valt" om spelaren fått bonusen
             if (fåttBonuspoäng)             { chlbxMöjligheter.SetItemChecked(6, true); }
-            if (specialfall["sexor"])       { chlbxMöjligheter.SetItemChecked(5, true); }
-            if (specialfall["femmor"])      { chlbxMöjligheter.SetItemChecked(4, true); }
-            if (specialfall["fyror"])       { chlbxMöjligheter.SetItemChecked(3, true); }
-            if (specialfall["treor"])       { chlbxMöjligheter.SetItemChecked(2, true); }
-            if (specialfall["tvåor"])       { chlbxMöjligheter.SetItemChecked(1, true); }
-            if (specialfall["ettor"])       { chlbxMöjligheter.SetItemChecked(0, true); }            
+            if (specialfall["Sexor"])       { chlbxMöjligheter.SetItemChecked(5, true); }
+            if (specialfall["Femmor"])      { chlbxMöjligheter.SetItemChecked(4, true); }
+            if (specialfall["Fyror"])       { chlbxMöjligheter.SetItemChecked(3, true); }
+            if (specialfall["Treor"])       { chlbxMöjligheter.SetItemChecked(2, true); }
+            if (specialfall["Tvåor"])       { chlbxMöjligheter.SetItemChecked(1, true); }
+            if (specialfall["Ettor"])       { chlbxMöjligheter.SetItemChecked(0, true); }            
 
         }
 
@@ -788,8 +779,7 @@ namespace Yatzy_1
             }
 
             // Återställer spelet
-            // TODO: Ta bort invariablarna här
-            LaddaSpelet(tärningarVärde, tärningarStatus, tärningarGrafik, historikLista);
+            LaddaSpelet();
         }
 
         private void pctTärning1_Click(object sender, EventArgs e)
