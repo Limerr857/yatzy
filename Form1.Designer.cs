@@ -154,6 +154,7 @@ namespace Yatzy_1
             this.chlbxSpecialfall.Name = "chlbxSpecialfall";
             this.chlbxSpecialfall.Size = new System.Drawing.Size(182, 154);
             this.chlbxSpecialfall.TabIndex = 6;
+            this.chlbxSpecialfall.MouseClick += new System.Windows.Forms.MouseEventHandler(this.chlbxSpecialfall_MouseClick);
             // 
             // btnRulla
             // 

@@ -739,7 +739,7 @@ namespace Yatzy_1
             if (specialfall["Fyrtal"])      { chlbxMöjligheter.SetItemChecked(10, true); }
             if (specialfall["Tretal"])      { chlbxMöjligheter.SetItemChecked(9, true); }
             if (specialfall["Två Par"])     { chlbxMöjligheter.SetItemChecked(8, true); }
-            if (specialfall["Par"])     { chlbxMöjligheter.SetItemChecked(7, true); }
+            if (specialfall["Par"])         { chlbxMöjligheter.SetItemChecked(7, true); }
             // Sätt bonus som "valt" om spelaren fått bonusen
             if (fåttBonuspoäng)             { chlbxMöjligheter.SetItemChecked(6, true); }
             if (specialfall["Sexor"])       { chlbxMöjligheter.SetItemChecked(5, true); }
@@ -876,6 +876,23 @@ namespace Yatzy_1
                     AvslutaSpelet(true, spelarPoäng, fåttBonuspoäng);
                 }
             }
+        }
+
+        private void chlbxSpecialfall_MouseClick(object sender, MouseEventArgs e)
+        {
+            // Metoden ser till så att bara ett specialfall kan väljas samtidigt
+
+            // Spara det valda specialfallet
+            int valtSpecialfall = chlbxSpecialfall.SelectedIndex;
+
+            // Avbocka alla specialfall
+            for (int i = 0; i < chlbxSpecialfall.Items.Count; i++)
+            {
+                chlbxSpecialfall.SetItemChecked(i, false);
+            }
+
+            // Återbocka det tidigare valda specialfallet
+            chlbxSpecialfall.SetItemChecked(valtSpecialfall, false);
         }
     }
 }
